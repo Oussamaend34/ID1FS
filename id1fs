@@ -1,0 +1,41 @@
+import click
+import hashlib
+import getpass
+import sys
+import random
+import json
+
+
+@click.command()
+@click.option("-s", "--status", is_flag=True, help="The status of the filesystem.")
+@click.option("-S", "--start", is_flag=True, help="Start the filesystem.")
+@click.option("-q", "--quit", is_flag=True, help="Quit the filesystem.")
+def my_commands(status, start, quit):
+    if status == True and start == False and quit == False:
+        with open("system/id1fs_status.json", "r") as f:
+            stat = json.load(f)
+        for key, value in stat.items():
+            click.echo(f"{key} : {value}")
+    if start == True and status == False and quit == False:
+        with open("system/id1fs_status.json", "r") as f:
+            stat = json.load(f)
+        if stat["status"] == "stoped":
+            stat["status"] = "started"
+            with open("system/id1fs_status.json", "w") as f:
+                json.dump(stat, f)
+        else:
+            click.echo("The filesystem is already started.")
+    if quit == True and start == False and status == False:
+        with open("system/id1fs_status.json", "r") as f:
+            stat = json.load(f)
+        if stat["status"] == "started":
+            stat["status"] = "stoped"
+            stat["connected_user"] = "None"
+            with open("system/id1fs_status.json", "w") as f:
+                json.dump(stat, f)
+        else:
+            click.echo("The filesystem is already stoped.")
+        
+
+if __name__ == "__main__":
+    my_commands()

@@ -1,0 +1,24 @@
+import os 
+import click
+import id1fs_functions as id1fs
+import sys
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+@click.option("-v", "--verbose", is_flag=True, required=0)
+def create_dir(path, verbose):
+    """Create a directory."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    dirname = path.split("/")[-1]
+    if id1fs.check_path(path.replace(dirname, "")) == False:
+        click.echo(f"mkdir: {path.replace(root, "").replace(dirname,"")}: No such directory")
+        sys.exit()
+    try:
+        os.mkdir(path)
+        if verbose:
+            click.echo(f"Created {path}")
+    except FileExistsError:
+        click.echo(f"{path} already exists")
+    
+create_dir()

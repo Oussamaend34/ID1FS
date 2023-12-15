@@ -1,0 +1,49 @@
+import click
+import shutil
+import os
+import sys
+import id1fs_functions as id1fs
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+@click.argument("limiter",type=str, required=0, default="EOF")
+@click.option("-w", "--write", is_flag=True, help="overwrite the file")
+@click.option("-a", "--append", is_flag=True, help="Append to the file")
+def Fill(path, limiter, write, append):
+    """Fill a file."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    bf = id1fs.get_backup()
+    d = limiter
+    try:
+        with open(path, "x"):
+            click.echo(f"Created {path}")
+        with  open(bf+"/"+id1fs.generate_bp_name(path), "x"):
+            click.echo(f"{path.replace(root, "")} backup created")
+    except FileExistsError:
+        pass
+    if id1fs.check_access(path, "w") == False:
+        click.echo(f"Fill: {path.replace(root, "")}: Permission denied")
+        sys.exit()
+    if write:
+        with open(path, "w") as f:
+           ecrire(f,d)
+    elif append:
+        with open(path, "a") as f:
+            ecrire(f,d)
+    else:
+        click.echo("Please specify either write or append do --help for more info")
+        sys.exit()
+    id1fs.create_file_backup(path)
+
+def ecrire(f,d):
+    """Write to a file."""
+    while True:
+        text = input("> ")
+        if text == d:
+                break
+        else:
+            f.write(f"{text}\n")
+
+
+Fill()

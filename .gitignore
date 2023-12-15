@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# filesystem
+filesystem/
+backup/
+files_metadata/
+roadmap.txt
+
 # C extensions
 *.so
 

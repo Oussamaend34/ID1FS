@@ -1,0 +1,33 @@
+import click
+import id1fs_functions as id1fs
+import sys
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+@click.option("-v", "--verbose", is_flag=True, required=0)
+def create(path, verbose):
+    """create a file."""
+    path = id1fs.generate_full_path(path)
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("You are not connected to ID1FS.")
+        sys.exit()
+    if id1fs.check_file(path):
+        click.echo(f"{path} already exists")
+        sys.exit()
+    dir=id1fs.get_path(path)
+    if dir !="" and not id1fs.check_dir(id1fs.get_path(path)):
+        click.echo(f"{id1fs.get_path(path)} does not exist")
+        sys.exit()
+    try:
+        id1fs.create_file(path)
+        if verbose:
+            click.echo(f"{path} created")
+        
+    except PermissionError:
+        click.echo(f"create: cannot create {path}: Permission denied")
+        sys.exit()
+    
+if __name__ == "__main__":
+    create()

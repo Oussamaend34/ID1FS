@@ -1,0 +1,25 @@
+import click
+import json
+import sys
+import id1fs_functions as id1fs
+
+@click.command()
+def logout():
+    """Logout of id1fs."""
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("You are not connected to ID1FS.")
+        sys.exit()
+    try:
+        with open("system/id1fs_status.json", "r") as f:
+            state=json.load(f)
+        state["connected_user"]="None"
+        click.echo("You are now Disconnected from ID1FS.")
+        with open("system/id1fs_status.json", "w") as f:
+            json.dump(state,f)
+    except FileNotFoundError:
+        click.echo("No users found")
+
+logout()

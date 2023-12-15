@@ -1,0 +1,68 @@
+import click
+import os
+import sys
+import id1fs_functions as id1fs
+
+def rm_dir(path, verbose,rot):
+    """Remove a directory recursively."""
+    for root, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            if id1fs.check_access(os.path.join(root, name), id1fs.get_user(), "w") == False:
+                click.echo(f"rm: cannot remove {(os.path.join(root, name)).replace(rot, "")}: Permission denied")
+                sys.exit()
+            if verbose:
+                click.echo(f"Removed {(os.path.join(root, name)).replace(rot, "")}")
+            if all:
+                id1fs.delete_file_backup(os.path.join(root, name))
+                print("Deleted backup")
+            os.remove(os.path.join(root, name))
+            id1fs.delete_metadata(os.path.join(root, name))
+        for name in dirs:
+            rm_dir(os.path.join(root, name), verbose, rot)
+    if verbose:
+        click.echo(f"Removed {path.replace(rot, "")}")
+    os.rmdir(path)
+
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+@click.option("--recursive", "-r", is_flag=True, help="Remove directories recursively")
+@click.option("--force", "-f", is_flag=True, help="Force removal without confirmation")
+@click.option("--verbose", "-v", is_flag=True, help="Verbose output")
+@click.option("--all", "-a", is_flag=True, help="Delete the backup file as well")
+def rm(path, recursive, force, verbose, all):
+    """Remove a file or directory."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    try:
+        if os.path.exists(path):
+            if os.path.isdir(path):
+                if not recursive:
+                    try:
+                        if force or click.confirm(f"Are you sure you want to remove {path} ?"):
+                            os.rmdir(path)
+                            if verbose:
+                                click.echo(f"Removed {path.replace(root, "")}")
+                    except OSError as e:
+                        click.echo(path.replace(root,"")+ " " +e.strerror)
+                else:
+                    if force or click.confirm(f"Are you sure you want to remove {path.replace(root,"")} ?"):
+                        rm_dir(path, verbose,root)
+            if os.path.isfile(path) and not recursive:
+                if force or click.confirm(f"Are you sure you want to remove {path.replace(root,"")} ?"):
+                    if verbose:
+                        click.echo(f"Removed {path}")
+                    if all:
+                        id1fs.delete_file_backup(path)
+                        print("Deleted backup")
+                    os.remove(path)
+                    id1fs.delete_metadata(path)
+            if os.path.isfile(path) and recursive:
+                click.echo(f"rm: cannot remove {path.replace(root,"")}: Not a directory")
+        else :
+            click.echo(f"{path.replace(root, "")} does not exist")
+    except PermissionError:
+        click.echo(f"rm: cannot remove {path.replace(root,"")}: Permission denied\nConsider logging out and logging in again.")
+
+
+rm()

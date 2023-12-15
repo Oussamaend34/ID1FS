@@ -1,0 +1,16 @@
+import click
+import shutil
+import os
+import sys
+import id1fs_functions as id1fs
+
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+def restore(path):
+    """Restore a file."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    
+if __name__ == "__main__":
+    restore()

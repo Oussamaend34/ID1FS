@@ -1,0 +1,23 @@
+import click
+import os
+
+def list(dirname, count=0):
+    if os.path.isdir(dirname):
+        for file in os.listdir(dirname):      
+            print("--"*count+f"|{file}")
+            if os.path.isdir(os.path.join(dirname, file)):
+                list(os.path.join(dirname, file), count+1)
+    else:
+        print(f"cannot access {dirname} : No such file or directory")
+
+
+@click.command()
+@click.argument("dirname", type=click.STRING, required=0, default=".")
+def list_files(dirname):
+    """List files in the given directory."""
+    list(dirname)
+
+
+
+if __name__ == "__main__":
+    list_files()

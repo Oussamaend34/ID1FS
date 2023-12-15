@@ -1,0 +1,43 @@
+import click
+import sys
+import getpass
+import json
+import id1fs_functions as id1fs
+
+
+@click.command()
+@click.argument("user", type=str, required=1)
+def deltusr(user):
+    """Delete a user from ID1FS."""
+    try:
+        with open("system/login.json", "r")as f:
+            users = json.load(f)
+    except FileNotFoundError:
+        click.echo("No users found.")
+        sys.exit()
+    except json.decoder.JSONDecodeError:
+        click.echo("No users found.")
+        sys.exit()
+    if user not in users.keys():
+        click.echo("This user doesn't exist.")
+        sys.exit()
+    if user == "root":
+        click.echo("You can't delete root.")
+        sys.exit()
+    if user == id1fs.get_user():
+        click.echo("You can't delete the user loged in now.")
+        sys.exit()
+    if not id1fs.check_root():
+        password=getpass.getpass("Enter the user password :")
+        password=id1fs.hash_string(password)
+        if password == users[user].strip():
+            id1fs.delete_user(user, users)
+        else:
+            click.echo("Wrong password.")
+            sys.exit()
+    else:
+        id1fs.delete_user(user, users)
+
+
+if __name__== "__main__":
+    deltusr()

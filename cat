@@ -1,0 +1,38 @@
+import click
+import os
+import id1fs_functions as id1fs
+import sys
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+def cat(path):
+    """Concatenate FILE(s) to standard output."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    if os.path.isdir(path):
+        click.echo(f"cat: {path}: Is a directory")
+        return
+    filename = path.split("/")[-1]
+    if id1fs.check_path(path) == False:
+        click.echo(f"cat: {path.replace(root, "")}: No such file or directory")
+        sys.exit()
+    if id1fs.check_dir(path) == True:
+        click.echo(f"cat: {path.replace(root, "")}: Is a directory")
+        sys.exit()
+    if id1fs.check_access(path, "r") == False:
+        click.echo(f"cat: {path.replace(root,"")}: Permission denied")
+        sys.exit()
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("You are not connected to ID1FS.")
+        sys.exit()
+    try:
+        with open(path, "r") as file:
+            click.echo(file.read())
+    except FileNotFoundError:
+        click.echo(f"cat: {path.replace(root, "")}: No such file or directory")
+
+if __name__ == "__main__":
+    cat()

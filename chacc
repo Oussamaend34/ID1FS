@@ -1,0 +1,34 @@
+import click
+import id1fs_functions as id1fs
+import sys
+
+access_types = ["r", "w", "x"]
+users_types = ["all", "owner"]
+@click.command()
+@click.argument("access", type=click.Choice(access_types), required=1)
+@click.argument("path", type=click.STRING, required=1)
+@click.option("-u","--user", type=click.Choice(users_types), required=0, default="all")
+def chacc(access, path, user):
+    """Change the access to the file."""
+    path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
+    if id1fs.check_path(path) == False:
+        click.echo(f"chacc: {path.replace(root, "")}: No such file or directory")
+        sys.exit()
+    filename = path.split("/")[-1]
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("You are not connected to ID1FS.")
+        sys.exit()
+    if id1fs.change_access(path, access, user):
+        if user == "all":
+            click.echo(f"Access changed for {filename} of {access} to all users.")
+        else:
+            click.echo(f"Access changed for {filename} of {access} to only the owner.")
+    else:
+        click.echo(f"Access not changed for {filename}.")
+
+if __name__ == "__main__":
+    chacc()
