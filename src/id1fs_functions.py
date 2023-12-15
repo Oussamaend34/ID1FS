@@ -50,7 +50,7 @@ def delete_user(username, users):
     print("User deleted.")
     del users[username]
     with open("system/login.json", "w")as f:
-        json.dump(users, f)
+        json.dump(users, f, indent=4)
 
 
 
@@ -117,7 +117,7 @@ def change_access(path, access_type, access):
     else:
         metadata["access"][access_type] = access
         with open(file_metadata, "w") as f:
-            json.dump(metadata, f)
+            json.dump(metadata, f, indent=4)
         return True
 
 
@@ -217,7 +217,7 @@ def create_metadata(path):
             "access":access
             }
     with open(get_metadata_folder() +"/"+generate_md_name(path), "w") as f:
-        json.dump(metadata, f)
+        json.dump(metadata, f, indent=4)
 
 def delete_metadata(path):
     """Delete the metadat of a file."""

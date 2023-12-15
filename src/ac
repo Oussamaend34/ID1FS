@@ -1,0 +1,31 @@
+import click
+import sys
+import id1fs_functions as id1fs
+import json
+
+
+@click.command()
+@click.argument("path", type=click.STRING, required=1)
+def access_directory(path):
+    """access a directory."""
+    root = id1fs.get_root()
+    path = id1fs.generate_full_path(path)
+    cwd = id1fs.get_cwd()
+    relative_path = path.replace(root,"")
+    if not id1fs.check_path(path):
+        click.echo("invalid path.")
+        sys.exit()
+    with open("system/env.json", "r") as f:
+        stat= json.load(f)
+    stat["cwd"] = relative_path
+    with open("system/env.json", "w") as f:
+        json.dump(stat,f,indent=4)
+    with open("system/layout", "r") as f:
+        layout = f.read()
+    layout = layout.replace(cwd,relative_path)
+    with open("system/layout", "w") as f:
+        f.write(layout)
+    
+access_directory()
+    
+    

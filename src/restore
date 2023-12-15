@@ -11,6 +11,20 @@ def restore(path):
     """Restore a file."""
     path = id1fs.generate_full_path(path)
     root = id1fs.get_root()
+    bf = id1fs.get_backup()
+    if id1fs.check_file(path):
+        print("This file already exist you can't restore it.")
+        sys.exit(1)
+    else:
+        key = id1fs.load_key()
+        fernet = id1fs.Fernet(key)
+        for file in os.listdir(bf):
+            temp = fernet.decrypt(file).decode('utf-8')
+            if temp.split('|')[0] == path:
+                shutil.copy(bf+"/"+file, path)
+                print("File restored.")
+                sys.exit(0)
+        print("This file doesn't have a backup.")
+        sys.exit(1)
     
-if __name__ == "__main__":
-    restore()
+restore()

@@ -1,0 +1,14 @@
+import subprocess
+
+# Command to execute
+command = "mkdir oussama"
+
+# Use subprocess to run the command
+result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+# Check the result
+if result.returncode == 0:
+    print("Command executed successfully")
+    print("Output:", result.stdout)
+else:
+    print("Error:", result.stderr)
