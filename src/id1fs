@@ -1,9 +1,7 @@
+#!/bin/python3
 import click
-import hashlib
-import getpass
-import sys
-import random
 import json
+import id1fs_functions as id1fs
 
 
 @click.command()
@@ -12,26 +10,26 @@ import json
 @click.option("-q", "--quit", is_flag=True, help="Quit the filesystem.")
 def my_commands(status, start, quit):
     if status == True and start == False and quit == False:
-        with open("system/id1fs_status.json", "r") as f:
+        with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             stat = json.load(f)
         for key, value in stat.items():
             click.echo(f"{key} : {value}")
     if start == True and status == False and quit == False:
-        with open("system/id1fs_status.json", "r") as f:
+        with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             stat = json.load(f)
         if stat["status"] == "stoped":
             stat["status"] = "started"
-            with open("system/id1fs_status.json", "w") as f:
+            with open(id1fs.get_system() + "/id1fs_status.json", "w") as f:
                 json.dump(stat, f)
         else:
             click.echo("The filesystem is already started.")
     if quit == True and start == False and status == False:
-        with open("system/id1fs_status.json", "r") as f:
+        with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             stat = json.load(f)
         if stat["status"] == "started":
             stat["status"] = "stoped"
             stat["connected_user"] = "None"
-            with open("system/id1fs_status.json", "w") as f:
+            with open(id1fs.get_system() + "/id1fs_status.json", "w") as f:
                 json.dump(stat, f)
         else:
             click.echo("The filesystem is already stoped.")

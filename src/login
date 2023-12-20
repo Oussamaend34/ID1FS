@@ -1,8 +1,10 @@
+#!/bin/python3
 import click
 import sys
 import getpass
 import json
 import id1fs_functions as id1fs
+import logging
 
 
 @click.command()
@@ -10,7 +12,7 @@ import id1fs_functions as id1fs
 def login(user):
     """connect to ID1FS."""
     try:
-        with open("system/login.json", "r")as f:
+        with open(id1fs.get_system() + "/login.json", "r")as f:
             users = json.load(f)
     except FileNotFoundError:
         click.echo("No users found.")
@@ -24,15 +26,18 @@ def login(user):
     password=getpass.getpass("Enter the user password :")
     password=id1fs.hash_string(password)
     if password == users[user].strip():
-        with open("system/id1fs_status.json", "r") as f:
+        id1fs.logging_config()
+        logging.info(f"{id1fs.get_user()} - login : {user} is loged in.")
+        with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             stat = json.load(f)
         stat["connected_user"] = user
-        with open("system/id1fs_status.json", "w")as f:
+        with open(id1fs.get_system() + "/id1fs_status.json", "w")as f:
             json.dump(stat, f)
     else:
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - login : wrong password.")
         click.echo("Wrong password.")
         sys.exit()
 
 
-if __name__== "__main__":
-    login()
+login()

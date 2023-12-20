@@ -1,3 +1,4 @@
+#!/bin/python3
 import click
 import shutil
 import os
@@ -12,6 +13,12 @@ def restore(path):
     path = id1fs.generate_full_path(path)
     root = id1fs.get_root()
     bf = id1fs.get_backup()
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("You are not connected to ID1FS.")
+        sys.exit()
     if id1fs.check_file(path):
         print("This file already exist you can't restore it.")
         sys.exit(1)
@@ -19,9 +26,11 @@ def restore(path):
         key = id1fs.load_key()
         fernet = id1fs.Fernet(key)
         for file in os.listdir(bf):
-            temp = fernet.decrypt(file).decode('utf-8')
+            file_temp = bytes(file, 'utf-8')
+            temp = fernet.decrypt(file_temp).decode('utf-8')
             if temp.split('|')[0] == path:
                 shutil.copy(bf+"/"+file, path)
+                id1fs.create_metadata(path)
                 print("File restored.")
                 sys.exit(0)
         print("This file doesn't have a backup.")

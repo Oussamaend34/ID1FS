@@ -1,8 +1,10 @@
+#!/bin/python3
 import click
 import sys
 import getpass
 import json
 import id1fs_functions as id1fs
+import logging
 
 
 @click.command()
@@ -10,7 +12,7 @@ import id1fs_functions as id1fs
 def deltusr(user):
     """Delete a user from ID1FS."""
     try:
-        with open("system/login.json", "r")as f:
+        with open(id1fs.get_system() + "/login.json", "r")as f:
             users = json.load(f)
     except FileNotFoundError:
         click.echo("No users found.")
@@ -31,13 +33,18 @@ def deltusr(user):
         password=getpass.getpass("Enter the user password :")
         password=id1fs.hash_string(password)
         if password == users[user].strip():
+            id1fs.logging_config()
+            logging.debug(f"{id1fs.get_user()} - user deleted")
             id1fs.delete_user(user, users)
         else:
+            id1fs.logging_config()
+            logging.debug(f"{id1fs.get_user()} - user deleted faild - wrong password.")
             click.echo("Wrong password.")
             sys.exit()
     else:
+        id1fs.logging_config()
+        logging.debug(f"{id1fs.get_user()} - user_deleted")
         id1fs.delete_user(user, users)
 
 
-if __name__== "__main__":
-    deltusr()
+deltusr()

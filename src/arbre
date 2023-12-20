@@ -1,5 +1,8 @@
+#!/bin/python3
 import click
 import os
+import id1fs_functions as id1fs
+import logging
 
 def list(dirname, count=0):
     if os.path.isdir(dirname):
@@ -8,6 +11,8 @@ def list(dirname, count=0):
             if os.path.isdir(os.path.join(dirname, file)):
                 list(os.path.join(dirname, file), count+1)
     else:
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - arbre command error.")
         print(f"cannot access {dirname} : No such file or directory")
 
 
@@ -15,7 +20,10 @@ def list(dirname, count=0):
 @click.argument("dirname", type=click.STRING, required=0, default=".")
 def list_files(dirname):
     """List files in the given directory."""
+    dirname = id1fs.generate_full_path(dirname)
     list(dirname)
+    id1fs.logging_config()
+    logging.debug(f"{id1fs.get_user()} - arbre command used.")
 
 
 

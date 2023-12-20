@@ -1,6 +1,9 @@
+#!/bin/python3
 import click
 import id1fs_functions as id1fs
 import sys
+import os
+import logging
 
 access_types = ["r", "w", "x"]
 users_types = ["all", "owner"]
@@ -12,23 +15,30 @@ def chacc(access, path, user):
     """Change the access to the file."""
     path = id1fs.generate_full_path(path)
     root = id1fs.get_root()
-    if id1fs.check_path(path) == False:
-        click.echo(f"chacc: {path.replace(root, "")}: No such file or directory")
-        sys.exit()
-    filename = path.split("/")[-1]
     if not id1fs.check_status():
         click.echo("The filesystem is not started.")
         sys.exit()
     if not id1fs.check_user():
         click.echo("You are not connected to ID1FS.")
         sys.exit()
+    if not os.path.exists(path):
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} changing access invalid path.")
+        click.echo(f"chacc: {path.replace(root, '')}: No such file or directory")
+        sys.exit()
+    filename = path.split("/")[-1]
     if id1fs.change_access(path, access, user):
         if user == "all":
+            id1fs.logging_config()
+            logging.debug(f"{id1fs.get_user()} - {path.replace(root,'')} changing access to all.")
             click.echo(f"Access changed for {filename} of {access} to all users.")
         else:
+            id1fs.logging_config()
+            logging.debug(f"{id1fs.get_user()} - {path.replace(root,'')} changing access to owner only.")
             click.echo(f"Access changed for {filename} of {access} to only the owner.")
     else:
         click.echo(f"Access not changed for {filename}.")
 
-if __name__ == "__main__":
-    chacc()
+
+
+chacc()

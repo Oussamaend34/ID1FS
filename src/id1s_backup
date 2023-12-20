@@ -1,0 +1,20 @@
+#!/bin/python3
+import click
+import shutil
+import os
+import sys
+import id1fs_functions as id1fs
+import logging
+
+@click.command()
+def id1fs_backup():
+    bf = id1fs.get_backup()
+    root = id1fs.get_root()
+    for file in os.listdir(bf):
+        file = os.path.basename(file)
+        [path,owner]=id1fs.restore_bp_name(file)
+        print(f"{path.replace(root,'')}, {owner}")
+    id1fs.logging_config()
+    logging.info(f"{id1fs.get_user()} - backup listed.")
+
+id1fs_backup()

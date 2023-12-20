@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 from cryptography.fernet import Fernet
+import logging
 
 
 def hash_string(input_string):
@@ -13,7 +14,7 @@ def hash_string(input_string):
     return sha256_hash.hexdigest()
 
 def check_status():
-    with open("system/id1fs_status.json", "r") as f:
+    with open(get_system() + "/id1fs_status.json", "r") as f:
         stat = json.load(f)
     if stat["status"] == "started":
         return True
@@ -24,12 +25,12 @@ def check_status():
     
 # user functions
 def get_user():
-    with open("system/id1fs_status.json", "r") as f:
+    with open(get_system() + "/id1fs_status.json", "r") as f:
         stat = json.load(f)
     return stat["connected_user"]
 
 def check_user():
-    with open("system/id1fs_status.json", "r") as f:
+    with open(get_system() + "/id1fs_status.json", "r") as f:
         stat = json.load(f)
     if stat["connected_user"] == "None":
         return False
@@ -38,7 +39,7 @@ def check_user():
 
 
 def check_root():
-    with open("system/id1fs_status.json", "r") as f:
+    with open(get_system() + "/id1fs_status.json", "r") as f:
         stat = json.load(f)
     if stat["connected_user"] == "root":
         return True
@@ -49,7 +50,7 @@ def delete_user(username, users):
     """Delete a user from ID1FS."""
     print("User deleted.")
     del users[username]
-    with open("system/login.json", "w")as f:
+    with open(get_system() + "/login.json", "w")as f:
         json.dump(users, f, indent=4)
 
 
@@ -66,7 +67,7 @@ def get_path(path):
     return os.path.dirname(path)
 def check_path(path):
     """Check if the path exists."""
-    if os.path.exists(path):
+    if os.path.isdir(path):
         return True
     else:
         return False
@@ -85,7 +86,8 @@ def check_access(path, access_type):
     fernet = Fernet(key)
     mdf = get_metadata_folder()
     for file in os.listdir(mdf):
-        temp = fernet.decrypt(file).decode('utf-8')
+        file_temp = bytes(file,'utf-8')
+        temp = fernet.decrypt(file_temp).decode('utf-8')
         if temp.split('|')[0] == path:
             file_metadata = mdf+"/"+file
             with open(file_metadata, "r") as f:
@@ -105,13 +107,16 @@ def change_access(path, access_type, access):
     fernet = Fernet(key)
     mdf = get_metadata_folder()
     for file in os.listdir(mdf):
-        temp = fernet.decrypt(file).decode('utf-8')
+        file_temp = bytes(file, 'utf-8')
+        temp = fernet.decrypt(file_temp).decode('utf-8')
         if temp.split('|')[0] == path:
             file_metadata = mdf+"/"+file
             with open(file_metadata, "r") as f:
                 metadata = json.load(f)
                 break
-    if metadata["owner"] != user:
+    if metadata["owner"] != user and user != 'root':
+        logging_config()
+        logging.error(f"{get_user()} - {path.replace(get_root(),'')} changing access Permission denied.")
         print("You are not the owner of this file.")
         return False
     else:
@@ -154,7 +159,8 @@ def create_file_backup(path):
     bp_name = generate_bp_name(path)
     bp_path = get_backup() + "/" + bp_name
     for file in os.listdir(bp_folder):
-        temp = fernet.decrypt(file).decode('utf-8')
+        file_temp = bytes(file, 'utf-8')
+        temp = fernet.decrypt(file_temp).decode('utf-8')
         if temp.split('|')[0] == path:
             os.remove(bp_folder+"/"+file)
             break
@@ -181,7 +187,8 @@ def delete_file_backup(path):
     key = load_key()
     bp_folder = get_backup()
     for file in os.listdir(bp_folder):
-        temp = fernet.decrypt(file).decode('utf-8')
+        file_temp = bytes(file, 'utf-8')
+        temp = fernet.decrypt(file_temp).decode('utf-8')
         if temp.split('|')[0] == path:
             os.remove(bp_folder+"/"+file)
             break
@@ -210,7 +217,7 @@ def generate_md_name(path):
 
 def create_metadata(path):
     user = get_user()
-    with open("system/access.json", "r") as f:
+    with open(get_system() + "/access.json", "r") as f:
         access=json.load(f)
     metadata={
             "owner":user,
@@ -225,7 +232,8 @@ def delete_metadata(path):
     key = load_key()
     fernet = Fernet(key)
     for file in os.listdir(mdf):
-        temp = fernet.decrypt(file).decode('utf-8')
+        file_temp = bytes(file, 'utf-8')
+        temp = fernet.decrypt(file_temp).decode('utf-8')
         if temp.split('|')[0] == path:
             os.remove(mdf+"/"+file)
             break
@@ -235,13 +243,13 @@ def delete_metadata(path):
 
 
 def load_key():
-    with open("system/key.key", "rb") as f:
+    with open(get_system() + "/key.key", "rb") as f:
         key = f.read()
     return key
 
 def get_cwd():
     """Return the current working directory."""
-    with open("system/env.json", "r") as f:
+    with open(get_system() + "/env.json", "r") as f:
         stat = json.load(f)
     return stat["cwd"]
 
@@ -256,18 +264,23 @@ def check_if_full_path(path):
 
 def get_root():
     """Return the root directory."""
-    with open("system/env.json", "r") as f:
+    with open(get_system() + "/env.json", "r") as f:
         stat = json.load(f)
     return stat["root"]
 def get_backup():
     """Return the backup directory."""
-    with open("system/env.json", "r") as f:
+    with open(get_system() + "/env.json", "r") as f:
         stat = json.load(f)
     return stat["bf"]
+def get_system():
+    """Return the full paht to the system."""
+    with open("/home/oussama/ID1FS/system/env.json", "r") as f:
+        stat = json.load(f)
+    return stat["systm"]
 
 def get_metadata_folder():
     """Return the metadata folder."""
-    with open("system/env.json", "r") as f:
+    with open(get_system() + "/env.json", "r") as f:
         stat = json.load(f)
     return stat["md"]
 
@@ -279,9 +292,11 @@ def generate_full_path(path):
     else:
         if path[0] == ".":
             name = path[1:]
-            name = get_cwd() + name
+            name = get_root()+get_cwd() + name
             return name
         else:
+            if get_cwd() == "/":
+                return get_root() + get_cwd() + path
             return get_root() + get_cwd() + '/' + path
 
 
@@ -298,7 +313,8 @@ def restore_bp_name(bp_name):
     """Restore the backup path and owner."""
     key = load_key()
     fernet = Fernet(key)
-    temp = fernet.decrypt(bp_name).decode('utf-8')
+    bp_name_temp = bytes(bp_name,'utf-8')
+    temp = fernet.decrypt(bp_name_temp).decode('utf-8')
     path = temp.split("|")[0]
     owner = temp.split("|")[1]
     return [path, owner]
@@ -323,3 +339,16 @@ def restore_file(path):
         print(f"{path} restored.")
         return True
 
+def get_log_file():
+    with open(get_system() +'/env.json', 'r') as f:
+        stat = json.load(f)
+    return stat["log"]
+
+def logging_config():
+    """Configuring the log file."""
+    log_file = get_log_file()
+    logging.basicConfig(
+        filename = log_file,
+        level = logging.DEBUG,
+        format = '%(asctime)s - %(levelname)s - %(message)s'
+    )

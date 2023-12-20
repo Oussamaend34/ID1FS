@@ -1,12 +1,15 @@
+#!/bin/python3
 import click
 import id1fs_functions as id1fs
 import sys
+import logging
 @click.command()
 @click.argument("path", type=click.STRING, required=1)
 @click.option("-v", "--verbose", is_flag=True, required=0)
 def create(path, verbose):
     """create a file."""
     path = id1fs.generate_full_path(path)
+    root = id1fs.get_root()
     if not id1fs.check_status():
         click.echo("The filesystem is not started.")
         sys.exit()
@@ -14,18 +17,26 @@ def create(path, verbose):
         click.echo("You are not connected to ID1FS.")
         sys.exit()
     if id1fs.check_file(path):
-        click.echo(f"{path} already exists")
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} file creation already exists.")
+        click.echo(f"{path.replace(root,'')} already exists")
         sys.exit()
     dir=id1fs.get_path(path)
     if dir !="" and not id1fs.check_dir(id1fs.get_path(path)):
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} file creation invalid path.")
         click.echo(f"{id1fs.get_path(path)} does not exist")
         sys.exit()
     try:
         id1fs.create_file(path)
+        id1fs.logging_config()
+        logging.debug(f"{id1fs.get_user()} - {path.replace(root,'')} file created.")
         if verbose:
             click.echo(f"{path} created")
         
     except PermissionError:
+        id1fs.logging_config()
+        logging.debug(f"{id1fs.get_user()} - {path.replace(root,'')} file creation Permission denied.")
         click.echo(f"create: cannot create {path}: Permission denied")
         sys.exit()
     

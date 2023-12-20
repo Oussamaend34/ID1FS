@@ -1,0 +1,30 @@
+import id1fs_functions as id1fs
+import json
+from cryptography.fernet import Fernet
+
+def generate_md_name(path):
+    """generate the backup name"""
+    key = load_key()
+    fernet = Fernet(key)
+    md_name= path + '|' +id1fs.get_user()
+    md_name = fernet.encrypt(md_name.encode()).decode('utf-8')
+    return md_name
+
+def create_metadata(path):
+    user = id1fs.get_user()
+    with open(id1fs.get_system() + "/access.json", "r") as f:
+        access=json.load(f)
+    metadata={
+            "owner":user,
+            "access":access
+            }
+    with open(id1fs.get_metadata_folder() +"/"+id1fs.generate_md_name(path), "w") as f:
+        json.dump(metadata, f, indent=4)
+
+
+def load_key():
+    with open(id1fs.get_system() + "/key.key", "r") as f:
+        key = f.read()
+    return key
+path = input("Enter a path : ")
+print(generate_md_name(path))

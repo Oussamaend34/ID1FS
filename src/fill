@@ -1,8 +1,10 @@
+#!/bin/python3
 import click
 import shutil
 import os
 import sys
 import id1fs_functions as id1fs
+import logging
 
 @click.command()
 @click.argument("path", type=click.STRING, required=1)
@@ -15,23 +17,43 @@ def Fill(path, limiter, write, append):
     root = id1fs.get_root()
     bf = id1fs.get_backup()
     d = limiter
+    if not id1fs.check_status():
+        click.echo("ID1FS is not started yet.")
+    if not id1fs.check_user():
+        click.echo("No one is connected to id1fs")
+    relative_path = os.path.dirname(path)
+    if not os.path.exists(relative_path):
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} fill : invalid path.")
+        click.echo("this path does not exist")
+        sys.exit()
     try:
         with open(path, "x"):
             click.echo(f"Created {path}")
+            logging.debug(f"{id1fs.get_user()} - {path.replace(root,'')} file created.")
         with  open(bf+"/"+id1fs.generate_bp_name(path), "x"):
-            click.echo(f"{path.replace(root, "")} backup created")
+            click.echo(f"{path.replace(root, '')} backup created")
+        id1fs.create_metadata(path)
     except FileExistsError:
         pass
     if id1fs.check_access(path, "w") == False:
-        click.echo(f"Fill: {path.replace(root, "")}: Permission denied")
+        id1fs.logging_config()
+        logging.error(f"{id1fs.get_user()} - {path.replace(id1fs.get_root(),'')} fill : Permission denied.")
+        click.echo(f"Fill: {path.replace(root, '')}: Permission denied")
         sys.exit()
     if write:
         with open(path, "w") as f:
            ecrire(f,d)
+        id1fs.logging_config()
+        logging.debug(f"{id1fs.get_user()} - {path.replace(id1fs.get_root(),'')} - fill : file updated.")
     elif append:
         with open(path, "a") as f:
             ecrire(f,d)
+        id1fs.logging_config()
+        logging.debug(f"{id1fs.get_user()} - {path.replace(id1fs.get_root(),'')} - fill : file updated.")
     else:
+        id1fs.logging_config()
+        logging.info(f"{id1fs.get_user()} - {path.replace(id1fs.get_root(),'')} - fill : did not specify mode.")
         click.echo("Please specify either write or append do --help for more info")
         sys.exit()
     id1fs.create_file_backup(path)
