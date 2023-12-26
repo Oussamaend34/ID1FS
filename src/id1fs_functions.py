@@ -277,7 +277,7 @@ def get_system():
     """Return the full paht to the system."""
     result = subprocess.run("whoami",capture_output = True, text = True,check = True)
     home_directory = "/home/" + result.stdout.strip()
-    fs = f"{home_directory}/.temp/.FS/ID1FS"
+    fs = f"{home_directory}/.id1fs/ID1FS"
     with open(f"{fs}/system/env.json", "r") as f:
         stat = json.load(f)
     return stat["systm"]

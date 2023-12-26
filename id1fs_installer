@@ -7,7 +7,11 @@ sudo apt install python3
 sudo apt install python3-pip
 pip3 install click
 ID1FS_dir="/home/$username/.id1fs"
-sudo mkdir -p $ID1FS_dir
+Home_dir="/home/$username"
+sudo rm -rvf $ID1FS_dir
+sudo mkdir -p $Home_dir
+sudo chown $username $Home_dir
+mkdir -p $ID1FS_dir
 cd $ID1FS_dir
 git clone https://github.com/Oussamaend34/ID1FS.git
 cd ID1FS
@@ -19,4 +23,18 @@ rm -f setup.py
 rm -f README.md
 rm -f .gitignore
 rm -rf .git
+rm -rf id1fs_installer
+cd $Home_dir
+echo >> .bashrc << "EOF"
+id1fs_start(){
+    /home/$username/.id1fs/ID1FS/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src
+}
+id1fs_stop(){
+    /home/$username/.id1fs/ID1FS/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc
+}
+ac(){
+    /home/oussama/.id1fs/ID1FS/ac $1 && source $ID1FS_dir/ID1FS/system/layout
+}
+EOF
+source ~/.bashrc
 echo "id1fs installed successfully"
