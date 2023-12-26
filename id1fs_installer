@@ -27,12 +27,12 @@ rm -rf .git
 rm -rf id1fs_installer
 cd $Home_dir
 cat >> .bashrc << "EOF"
-ID1FS_dir="/home/$(whoami)/.id1fs"
+export ID1FS_dir="/home/$(whoami)/.id1fs"
 id1fs_start(){
-    $ID1FS_dir/ID1FS/src/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src && $ID1FS_dir/ID1FS/system/disable_builtin_commands
+    $ID1FS_dir/ID1FS/src/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src && source $ID1FS_dir/ID1FS/src/disable_builtin_commands
 }
 id1fs_stop(){
-    $ID1FS_dir/ID1FS/src/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc && $ID1FS_dir/ID1FS/system/enable_builtin_commands
+    $ID1FS_dir/ID1FS/src/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc && source $ID1FS_dir/ID1FS/src/enable_builtin_commands
 }
 ac(){
     $ID1FS_dir/ID1FS/src/ac $1 && source $ID1FS_dir/ID1FS/system/layout

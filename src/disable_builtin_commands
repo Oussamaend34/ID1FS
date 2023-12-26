@@ -1,0 +1,26 @@
+cd(){
+    $ID1FS_dir/ID1FS/src/id1fs "have you ever heard of the commadn ac from id1fs?"
+}
+exit(){
+    $ID1FS_dir/ID1FS/src/id1fs "Sorry, ID1FS is running, you can't exit try id1fs_stop instead"
+}
+echo(){
+    $ID1FS_dir/ID1FS/src/id1fs "I didn't know that echo command exists in id1fs"
+}
+ls(){
+    $ID1FS_dir/ID1FS/src/id1fs "Nah, I am not listing the files in id1fs"
+}
+mkdir(){
+    $ID1FS_dir/ID1FS/src/id1fs "I am not making a directory in id1fs"
+}
+touch(){
+    $ID1FS_dir/ID1FS/src/id1fs "I am not making a file in id1fs"
+}
+rm(){
+    $ID1FS_dir/ID1FS/src/id1fs "Sorry, Wrong Number"
+}
+rmdir(){
+    $ID1FS_dir/ID1FS/src/id1fs "Sorry, Wrong Number"
+}
+
+
