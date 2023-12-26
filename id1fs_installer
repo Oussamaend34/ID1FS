@@ -23,7 +23,7 @@ mkdir $ID1FS_dir/metadata
 mkdir $ID1FS_dir/home
 cp -r src $ID1FS_dir
 cp -r system $ID1FS_dir
-chmod +x src/*
+chmod +x $ID1FS_dir/src/*
 python3 setup.py install
 cd $Home_dir
 cat >> .bashrc << "EOF"
