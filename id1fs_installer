@@ -33,7 +33,12 @@ rm -rf .git
 rm -rf id1fs_installer
 cd $Home_dir
 cat >> .bashrc << "EOF"
-export ID1FS_dir="/home/$(whoami)/.id1fs"
+if [ $username == "root" ]
+then
+    export ID1FS_dir="/root/.id1fs"
+else 
+    export ID1FS_dir="/home/$(whoami)/.id1fs"
+fi
 id1fs_start(){
     $ID1FS_dir/ID1FS/src/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src && source $ID1FS_dir/ID1FS/src/disable_builtin_commands
 }
