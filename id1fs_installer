@@ -11,26 +11,20 @@ then
     ID1FS_dir="/root/.id1fs"
     Home_dir="/root"
 else 
-    ID1FS_dir="/home/$username/.id1fs"
+    ID1FS_dir="/home/$username/.id1fs/ID1FS"
     Home_dir="/home/$username"
 fi
 sudo rm -rvf $ID1FS_dir
 sudo mkdir -p $Home_dir
 sudo chown $username $Home_dir
 mkdir -p $ID1FS_dir
-cd $ID1FS_dir
-git clone https://github.com/Oussamaend34/ID1FS.git
-cd ID1FS
-mkdir backup
-mkdir metadata
-mkdir home
+mkdir $ID1FS_dir/backup
+mkdir $ID1FS_dir/metadata
+mkdir $ID1FS_dir/home
+cp -r src $ID1FS_dir
+cp -r system $ID1FS_dir
 chmod +x src/*
 python3 setup.py install
-rm -f setup.py
-rm -f README.md
-rm -f .gitignore
-rm -rf .git
-rm -rf id1fs_installer
 cd $Home_dir
 cat >> .bashrc << "EOF"
 if [ $(whoami) = "root" ]
