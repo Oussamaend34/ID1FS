@@ -1,5 +1,5 @@
 cd(){
-    $ID1FS_dir/ID1FS/src/my_echo "have you ever heard of the commadn ac from id1fs?"
+    $ID1FS_dir/ID1FS/src/my_echo "have you ever heard of the command ac from id1fs?"
 }
 exit(){
     $ID1FS_dir/ID1FS/src/my_echo "Sorry, ID1FS is running, you can't exit try id1fs_stop instead"

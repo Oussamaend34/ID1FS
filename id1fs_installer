@@ -43,7 +43,7 @@ id1fs_start(){
     $ID1FS_dir/ID1FS/src/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src && source $ID1FS_dir/ID1FS/src/disable_builtin_commands
 }
 id1fs_stop(){
-    $ID1FS_dir/ID1FS/src/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc && source $ID1FS_dir/ID1FS/src/enable_builtin_commands
+    $ID1FS_dir/ID1FS/src/id1fs -q && source /etc/environment && source $ID1FS_dir/ID1FS/src/enable_builtin_commands && cd ~ && source ~/.bashrc 
 }
 EOF
 source ~/.bashrc
