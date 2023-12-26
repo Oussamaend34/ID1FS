@@ -6,7 +6,7 @@ sudo apt-get install git
 sudo apt install python3
 sudo apt install python3-pip
 pip3 install click
-if [ $username == "root" ]
+if [ $username = "root" ];
 then
     ID1FS_dir="/root/.id1fs"
     Home_dir="/root"
@@ -33,7 +33,7 @@ rm -rf .git
 rm -rf id1fs_installer
 cd $Home_dir
 cat >> .bashrc << "EOF"
-if [ $username == "root" ]
+if [ $(whoami) = "root" ]
 then
     export ID1FS_dir="/root/.id1fs"
 else 
