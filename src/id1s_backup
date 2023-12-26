@@ -10,6 +10,12 @@ import logging
 def id1fs_backup():
     bf = id1fs.get_backup()
     root = id1fs.get_root()
+    if not id1fs.check_status():
+        click.echo("filesystem not mounted.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("user not logged in.")
+        sys.exit()
     for file in os.listdir(bf):
         file = os.path.basename(file)
         [path,owner]=id1fs.restore_bp_name(file)

@@ -19,8 +19,10 @@ def Fill(path, limiter, write, append):
     d = limiter
     if not id1fs.check_status():
         click.echo("ID1FS is not started yet.")
+        sys.exit()
     if not id1fs.check_user():
         click.echo("No one is connected to id1fs")
+        sys.exit()
     relative_path = os.path.dirname(path)
     if not os.path.exists(relative_path):
         id1fs.logging_config()

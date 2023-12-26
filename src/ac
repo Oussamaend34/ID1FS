@@ -13,6 +13,12 @@ def access_directory(path):
     path = id1fs.generate_full_path(path)
     cwd = id1fs.get_cwd()
     relative_path = path.replace(root,"")
+    if not id1fs.check_status():
+        click.echo("filesystem not mounted.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("user not logged in.")
+        sys.exit()
     if not id1fs.check_path(path):
         click.echo("invalid path.")
         sys.exit()

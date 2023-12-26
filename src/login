@@ -11,6 +11,12 @@ import logging
 @click.argument("user", type=str, required=1)
 def login(user):
     """connect to ID1FS."""
+    if not id1fs.check_status():
+        click.echo("The filesystem is not started.")
+        sys.exit()
+    if id1fs.check_user():
+        click.echo("A user is already connected.")
+        sys.exit()
     try:
         with open(id1fs.get_system() + "/login.json", "r")as f:
             users = json.load(f)
@@ -33,6 +39,11 @@ def login(user):
         stat["connected_user"] = user
         with open(id1fs.get_system() + "/id1fs_status.json", "w")as f:
             json.dump(stat, f)
+        with open(id1fs.get_system() + "/layout", "r")as f:
+            layout = f.read()
+        layout = layout.replace("None", user)
+        with open(id1fs.get_system() + "/layout", "w")as f:
+            f.write(layout)
     else:
         id1fs.logging_config()
         logging.error(f"{id1fs.get_user()} - login : wrong password.")

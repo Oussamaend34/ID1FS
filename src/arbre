@@ -3,6 +3,7 @@ import click
 import os
 import id1fs_functions as id1fs
 import logging
+import sys
 
 def list(dirname, count=0):
     if os.path.isdir(dirname):
@@ -20,6 +21,12 @@ def list(dirname, count=0):
 @click.argument("dirname", type=click.STRING, required=0, default=".")
 def list_files(dirname):
     """List files in the given directory."""
+    if not id1fs.check_status():
+        click.echo("filesystem not mounted.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("user not logged in.")
+        sys.exit()
     dirname = id1fs.generate_full_path(dirname)
     list(dirname)
     id1fs.logging_config()

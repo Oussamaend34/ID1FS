@@ -16,8 +16,10 @@ def create_dir(path, verbose):
     relative_path = os.path.dirname(path)
     if not id1fs.check_status():
         click.echo("ID1FS is not started yet.")
+        sys.exit()
     if not id1fs.check_user():
         click.echo("No one is connected to id1fs")
+        sys.exit()
     if not os.path.exists(relative_path):
         id1fs.logging_config()
         logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} - create_dir : invalid path.")

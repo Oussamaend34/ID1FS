@@ -1,0 +1,22 @@
+#!/bin/bash
+username=$(whoami)
+echo "Installing id1fs..."
+echo "Installing dependencies..."
+sudo apt-get install git
+sudo apt install python3
+sudo apt install python3-pip
+pip3 install click
+ID1FS_dir="/home/$username/.id1fs"
+sudo mkdir -p $ID1FS_dir
+cd $ID1FS_dir
+git clone https://github.com/Oussamaend34/ID1FS.git
+cd ID1FS
+mkdir backup
+mkdir metadata
+mkdir home
+python3 setup.py install
+rm -f setup.py
+rm -f README.md
+rm -f .gitignore
+rm -rf .git
+echo "id1fs installed successfully"

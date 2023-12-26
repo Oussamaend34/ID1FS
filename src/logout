@@ -17,12 +17,18 @@ def logout():
     try:
         id1fs.logging_config()
         logging.info(f"{id1fs.get_user()} - login : user is loged out.")
+        with open(id1fs.get_system() + "/layout", "r")as f:
+            layout = f.read()
+        layout = layout.replace(id1fs.get_user(), "None")
+        with open(id1fs.get_system() + "/layout", "w")as f:
+            f.write(layout)
         with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             state=json.load(f)
         state["connected_user"]="None"
         click.echo("You are now Disconnected from ID1FS.")
         with open(id1fs.get_system() + "/id1fs_status.json", "w") as f:
             json.dump(state,f)
+
     except FileNotFoundError:
         click.echo("No users found")
 

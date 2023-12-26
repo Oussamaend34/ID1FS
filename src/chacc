@@ -39,6 +39,4 @@ def chacc(access, path, user):
     else:
         click.echo(f"Access not changed for {filename}.")
 
-
-
 chacc()

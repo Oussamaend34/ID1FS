@@ -35,6 +35,12 @@ def rm(path, recursive, force, verbose, all):
     """Remove a file or directory."""
     path = id1fs.generate_full_path(path)
     root = id1fs.get_root()
+    if not id1fs.check_status():
+        click.echo("ID1FS is not started yet.")
+        sys.exit()
+    if not id1fs.check_user():
+        click.echo("No one is connected to id1fs")
+        sys.exit()
     try:
         if os.path.exists(path):
             if os.path.isdir(path):
