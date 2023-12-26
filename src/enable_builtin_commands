@@ -22,3 +22,8 @@ rm(){
 rmdir(){
     /usr/bin/rmdir $@
 }
+login(){
+    /usr/bin/login $@
+}
+logout(){
+}

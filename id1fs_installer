@@ -37,12 +37,6 @@ id1fs_stop(){
 ac(){
     $ID1FS_dir/ID1FS/src/ac $1 && source $ID1FS_dir/ID1FS/system/layout
 }
-login(){
-    $ID1FS_dir/ID1FS/src/login_id1fs $1 && source $ID1FS_dir/ID1FS/system/layout
-}
-logout(){
-    $ID1FS_dir/ID1FS/src/logout && source $ID1FS_dir/ID1FS/system/layout
-}
 EOF
 source ~/.bashrc
 echo "id1fs installed successfully"
