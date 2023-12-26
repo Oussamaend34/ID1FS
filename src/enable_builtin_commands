@@ -7,9 +7,6 @@ exit(){
 echo(){
     /usr/bin/echo $@
 }
-ls(){
-    /usr/bin/ls $@
-}
 mkdir(){
     /usr/bin/mkdir $@
 }
