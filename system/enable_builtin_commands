@@ -1,0 +1,25 @@
+#!bin/bash
+cd(){
+    builtin cd $@
+}
+exit(){
+    builtin exit $@
+}
+echo(){
+    /usr/bin/echo $@
+}
+ls(){
+    /usr/bin/ls $@
+}
+mkdir(){
+    /usr/bin/mkdir $@
+}
+touch(){
+    /usr/bin/touch $@
+}
+rm(){
+    /usr/bin/rm $@
+}
+rmdir(){
+    /usr/bin/rmdir $@
+}
