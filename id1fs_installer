@@ -6,8 +6,14 @@ sudo apt-get install git
 sudo apt install python3
 sudo apt install python3-pip
 pip3 install click
-ID1FS_dir="/home/$username/.id1fs"
-Home_dir="/home/$username"
+if [ $username == "root" ]
+then
+    ID1FS_dir="/root/.id1fs"
+    Home_dir="/root"
+else 
+    ID1FS_dir="/home/$username/.id1fs"
+    Home_dir="/home/$username"
+fi
 sudo rm -rvf $ID1FS_dir
 sudo mkdir -p $Home_dir
 sudo chown $username $Home_dir
