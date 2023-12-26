@@ -3,11 +3,12 @@ import subprocess
 
 env = {}
 User =subprocess.run("whoami", capture_output=True).stdout.decode("utf-8").strip()
-env["root"] = f"/home/{User}/.id1fs/ID1FS"
-env["bf"] = f"/home/{User}/.id1fs/ID1FS/backup"
-env["md"] = f"/home/{User}/.id1fs/ID1FS/metadata"
-env["log"] = f"/home/{User}/.id1fs/ID1FS/system/log"
-env["systm"] = f"/home/{User}/.id1fs/ID1FS/system"
+home_directory = f"/home/{User}" if User != "root" else "/root"
+env["root"] = f"{home_directory}/.id1fs/ID1FS"
+env["bf"] = f"{home_directory}/.id1fs/ID1FS/backup"
+env["md"] = f"{home_directory}/.id1fs/ID1FS/metadata"
+env["log"] = f"{home_directory}/.id1fs/ID1FS/system/log"
+env["systm"] = f"{home_directory}/.id1fs/ID1FS/system"
 env["cwd"] = f"/home"
 
 with open('system/env.json','w') as f:
