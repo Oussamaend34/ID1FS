@@ -34,9 +34,6 @@ id1fs_start(){
 id1fs_stop(){
     $ID1FS_dir/ID1FS/src/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc && source $ID1FS_dir/ID1FS/src/enable_builtin_commands
 }
-ac(){
-    $ID1FS_dir/ID1FS/src/ac $1 && source $ID1FS_dir/ID1FS/system/layout
-}
 EOF
 source ~/.bashrc
 echo "id1fs installed successfully"

@@ -28,5 +28,8 @@ login(){
 logout(){
     $ID1FS_dir/ID1FS/src/logout && source $ID1FS_dir/ID1FS/system/layout
 }
+ac(){
+    $ID1FS_dir/ID1FS/src/ac $1 && source $ID1FS_dir/ID1FS/system/layout
+}
 
 

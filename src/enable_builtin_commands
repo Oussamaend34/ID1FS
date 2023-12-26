@@ -26,4 +26,8 @@ login(){
     /usr/bin/login $@
 }
 logout(){
+    builtin logout $@
+}
+ac(){
+    echo "You are not in id1fs anymore ;)"
 }
