@@ -18,6 +18,7 @@ cd ID1FS
 mkdir backup
 mkdir metadata
 mkdir home
+chmod +x src/*
 python3 setup.py install
 rm -f setup.py
 rm -f README.md
@@ -25,15 +26,16 @@ rm -f .gitignore
 rm -rf .git
 rm -rf id1fs_installer
 cd $Home_dir
-echo >> .bashrc << "EOF"
+cat >> .bashrc << "EOF"
+ID1FS_dir="/home/$(whoami)/.id1fs"
 id1fs_start(){
-    /home/$username/.id1fs/ID1FS/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src
+    $ID1FS_dir/ID1FS/id1fs -S && source $ID1FS_dir/ID1FS/system/layout && PATH=$ID1FS_dir/ID1FS/src
 }
 id1fs_stop(){
-    /home/$username/.id1fs/ID1FS/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc
+    $ID1FS_dir/ID1FS/id1fs -q && source /etc/environment && cd ~ && source ~/.bashrc
 }
 ac(){
-    /home/oussama/.id1fs/ID1FS/ac $1 && source $ID1FS_dir/ID1FS/system/layout
+    $ID1FS_dir/ID1FS/ac $1 && source $ID1FS_dir/ID1FS/system/layout
 }
 EOF
 source ~/.bashrc
