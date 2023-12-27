@@ -1,0 +1,48 @@
+import click
+import os
+import sys
+import json
+import shutil
+import logging
+import id1fs_functions as id1fs
+
+
+@click.command()
+@click.option("--path",prompt="give the path",help="give the path to the file or diractory to downloald")
+
+
+def download(path):
+    try:
+        root=id1fs.get_root()
+        x=input("cette operation va utiliser plus d'espace de votre memoire \n voulez vous continuer?[oui/non] ")
+        if 'oui'==x :
+            if os.path.isfile(path) :
+                try:
+                    shutil.copy(path,f"{root}/downloads")
+                    path = id1fs.get_root() + "/downloads" + os.path.basename(path)
+                    id1fs.create_metadata(path)
+                    id1fs.create_file_backup(path)
+                except FileExistsError:
+                    id1fs.logging_config()
+                    logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} file creation already exists.")
+                    click.echo("Ce fichier existe deja")
+                sys.exit()
+            if os.path.isdir(path) :
+                if os.path.exists(f"{root}/downloads"+ os.path.basename(path)):
+                    id1fs.logging_config()
+                    logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} directory creation already exists.")
+                    click.echo("Ce repertoire existe deja")
+                    sys.exit()
+                else:
+                    shutil.copytree(path,os.path.join(f"{root}/downloads", os.path.basename(path)))
+                    path = id1fs.get_root() + "/downloads" + os.path.basename(path)
+                    for _, _, filenames in os.walk(path):
+                        for filename in filenames :
+                            id1fs.create_metadata(path)
+                            id1fs.create_file_backup(os.path.join(path, filename))
+            click.echo(f"le chargement du {path} est assure avec succes")
+    except FileNotFoundError:
+        click.echo("file not found")
+        sys.exit()
+
+download()

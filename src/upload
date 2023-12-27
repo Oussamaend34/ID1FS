@@ -1,0 +1,50 @@
+import click
+import os
+import sys
+import json
+import shutil
+import logging
+import id1fs_functions as id1fs
+
+
+@click.command()
+@click.option("--path",prompt="give the path",help="give the path to the file or diractory to upload")
+#the path is supposed to be located in downloads directory
+
+def upload(path):
+    rps=os.path.isdir(path)
+    try:
+        root=id1fs.get_root()
+        path=id1fs.generate_full_path(path)
+        x=input("cette operation va utiliser plus d'espace de votre memoire \n voulez vous continuer?[oui/non] ")
+        if 'oui'==x :
+            if os.path.isfile(path) :
+                try:
+                    destin=os.path.expanduser("~/")
+                    shutil.copy(path,destin)
+                except FileExistsError:
+                    id1fs.logging_config()
+                    logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} file creation already exists.")
+                    click.echo("Ce fichier existe deja")
+                    sys.exit()
+            if os.path.isdir(path) :
+                destin=os.path.expanduser("~/")
+                if os.path.exists(destin):
+                    id1fs.logging_config()
+                    logging.error(f"{id1fs.get_user()} - {path.replace(root,'')} directory creation already exists.")
+                    click.echo("Ce repertoire existe deja")
+                    sys.exit()
+                else:
+                    destin=os.path.expanduser("~/")
+                    shutil.copytree(path,destin)
+            click.echo(f"le chargement du {path} en dehors de I1DFS est assure avec succes")
+    except FileNotFoundError:
+        if True==rps:
+            click.echo("directory not found")
+            sys.exit()
+        else:
+            click.echo("file not found")
+            sys.exit()
+
+
+upload()
