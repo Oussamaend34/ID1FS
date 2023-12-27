@@ -32,7 +32,7 @@ def signup(username):
         password = getpass.getpass("Enter the password : ")
         repassword = getpass.getpass("Renter the password : ")
         if password == repassword:
-            with open(id1fs.get_system() + "/login.json", "r")as f:
+            with open(id1fs.get_system() + "/login.json", "w")as f:
                 users[username] = id1fs.hash_string(password)
                 json.dump(users, f)
             break

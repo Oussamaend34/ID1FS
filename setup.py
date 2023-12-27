@@ -14,5 +14,5 @@ env["cwd"] = f"/home"
 with open(f"{home_directory}/.id1fs/ID1FS/system/env.json",'w') as f:
     json.dump(env, f, indent=4)
 
-with open(f"{home_directory}/.id1fs/ID1FS/system/logs",'w') as f:
+with open(f"{home_directory}/.id1fs/ID1FS/system/log",'w') as f:
     f.write("")
