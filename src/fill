@@ -23,6 +23,12 @@ def Fill(path, limiter, write, append):
     if not id1fs.check_user():
         click.echo("No one is connected to id1fs")
         sys.exit()
+    if path in [f"{root}/home", f"{root}/src",f"{root}/system",f"{root}/backup",f"{root}/metadata"]:
+        click.echo(f"rm: cannot remove {path.replace(root,'')}: Permission denied")
+        sys.exit()
+    if f"{root}/system" in path:
+        click.echo(f"rm: cannot remove {path.replace(root,'')}: Permission denied")
+        sys.exit()
     relative_path = os.path.dirname(path)
     if not os.path.exists(relative_path):
         id1fs.logging_config()

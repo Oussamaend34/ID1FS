@@ -27,6 +27,10 @@ def cat(path):
     if id1fs.check_dir(path) == True:
         click.echo(f"cat: {path.replace(root, '')}: Is a directory")
         sys.exit()
+    if path in [f"{root}/system/env.json", f"{root}/system/id1fs_status.json", f"{root}/system/login.json", f"{root}/system/layout", f"{root}/system/metadata.json",f"{root}/system/log"]:
+        with open(path, "r") as file:
+            click.echo(file.read())
+        sys.exit()
     if id1fs.check_access(path, "r") == False:
         id1fs.logging_config()
         logging.error(f"{id1fs.get_user()} - {path.replace(id1fs.get_root(),'')} cat : Permission denied.")
