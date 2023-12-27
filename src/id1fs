@@ -26,6 +26,12 @@ def my_commands(status, start, quit):
     if quit == True and start == False and status == False:
         with open(id1fs.get_system() + "/id1fs_status.json", "r") as f:
             stat = json.load(f)
+        user = stat["connected_user"]
+        with open(id1fs.get_system() + "/layout", "r")as f:
+            layout = f.read()
+        layout = layout.replace("None", user)
+        with open(id1fs.get_system() + "/layout", "w")as f:
+            f.write(layout)
         if stat["status"] == "started":
             stat["status"] = "stoped"
             stat["connected_user"] = "None"

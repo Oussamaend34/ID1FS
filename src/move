@@ -30,19 +30,18 @@ def move(where_to_move,path_to_move):
                         for file in files:
                             id1fs.create_file_backup(os.path.join(root,file))
                             id1fs.create_metadata(os.path.join(root,file))
-                    click.echo(f"{path_to_move} was moved successfully")
+                    click.echo(f"{path_to_move.replace(root,'')} was moved successfully")
                 elif os.path.isfile(path_to_move):
                     id1fs.delete_metadata(path_to_move)
                     id1fs.delete_file_backup(path_to_move)
-                    shutil.copy(path_to_move,os.path.join(where_to_move,os.path.basename(path_to_move)))
+                    shutil.move(path_to_move,os.path.join(where_to_move,os.path.basename(path_to_move)))
                     id1fs.create_metadata(os.path.join(where_to_move,os.path.basename(path_to_move)))
                     id1fs.create_file_backup(os.path.join(where_to_move,os.path.basename(path_to_move)))
-                    os.remove(path_to_move)
-                    click.echo(f"{path_to_move} was moved successfully")
+                    click.echo(f"{path_to_move.replace(root,'')} was moved successfully")
             elif os.path.isfile(where_to_move):
-                click.echo(f"the destination that you gived me is file\n make sure that you didn't confuse the order \nTry move {where_to_move} {path_to_move}")
+                click.echo(f"the destination that you gived me is file\n make sure that you didn't confuse the order \nTry move {where_to_move.replace(root,'')} {path_to_move.replace(root,'')}")
         else:
-            click.echo(f"{where_to_move} does not exist ")    
+            click.echo(f"{where_to_move.replace(root,'')} does not exist ")    
     except FileNotFoundError:
         click.echo("file not found")
         sys.exit()
