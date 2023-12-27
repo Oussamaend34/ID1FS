@@ -44,9 +44,12 @@ def rm(path, recursive, force, verbose, all):
     try:
         if os.path.exists(path):
             if os.path.isdir(path):
+                if path in [f"{root}/home", f"{root}/src",f"{root}/system",f"{root}/backup",f"{root}/metadata"]:
+                    click.echo(f"rm: cannot remove {path.replace(root,'')}: Permission denied")
+                    sys.exit()
                 if not recursive:
                     try:
-                        if force or click.confirm(f"Are you sure you want to remove {path} ?"):
+                        if force or click.confirm(f"Are you sure you want to remove {path.replace(root,'')} ?"):
                             os.rmdir(path)
                             if verbose:
                                 click.echo(f"Removed {path.replace(root, '')}")

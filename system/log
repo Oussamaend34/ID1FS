@@ -1,0 +1,41 @@
+2023-12-19 12:41:19,614 - DEBUG - root - /home/oussama file created.
+2023-12-19 13:05:18,670 - ERROR - root - /home/oussama file already exists.
+2023-12-19 13:05:36,030 - ERROR - root - /hamza/oussama invalid path.
+2023-12-19 15:53:43,721 - INFO - root - /home listed.
+2023-12-20 20:44:42,054 - ERROR - root - login : wrong password.
+2023-12-20 20:44:46,224 - INFO - root - login : root is loged in.
+2023-12-20 20:45:02,675 - INFO - root - /home listed.
+2023-12-20 20:45:14,802 - DEBUG - root - /home/ayoub folder created.
+2023-12-20 20:45:17,407 - INFO - root - /home listed.
+2023-12-20 20:45:32,778 - INFO - root - /home/ayoub listed.
+2023-12-20 20:45:36,881 - INFO - root - /home/ayoub listed.
+2023-12-20 20:45:49,484 - INFO - root - / listed.
+2023-12-20 20:46:06,972 - INFO - root - /src listed.
+2023-12-20 20:46:43,488 - INFO - root - login : user is loged out.
+2023-12-22 02:36:18,908 - INFO - None - login : root is loged in.
+2023-12-22 02:36:26,459 - INFO - root - /src listed.
+2023-12-22 02:36:36,260 - INFO - root - /home listed.
+2023-12-22 02:36:46,283 - INFO - root - /home/mohamed listed.
+2023-12-22 02:36:56,870 - INFO - root - /home/mohamed/mohamed listed.
+2023-12-22 02:37:04,684 - DEBUG - root - /home/mohamed/mohamed/oussama file created.
+2023-12-22 02:37:12,008 - INFO - root - /home listed.
+2023-12-22 02:40:29,989 - INFO - root - /home listed.
+2023-12-23 18:04:29,098 - INFO - root - login : user is loged out.
+2023-12-25 15:40:51,289 - INFO - None - login : oussama is loged in.
+2023-12-25 15:40:59,929 - INFO - oussama - /home listed.
+2023-12-25 15:41:20,858 - DEBUG - oussama - /home/oussama folder created.
+2023-12-25 15:41:28,560 - INFO - oussama - /home listed.
+2023-12-25 15:41:37,560 - INFO - oussama - /home listed.
+2023-12-25 15:41:40,001 - INFO - oussama - /home listed.
+2023-12-25 15:41:42,939 - INFO - oussama - /home listed.
+2023-12-25 15:41:45,865 - INFO - oussama - /home listed.
+2023-12-25 15:42:36,348 - INFO - oussama - login : user is loged out.
+2023-12-25 15:50:30,064 - INFO - None - login : oussama is loged in.
+2023-12-25 15:50:37,157 - INFO - oussama - / listed.
+2023-12-25 16:24:25,933 - INFO - oussama - / listed.
+2023-12-25 16:24:41,552 - INFO - oussama - /home listed.
+2023-12-25 16:24:49,824 - DEBUG - oussama - /home/amine file created.
+2023-12-25 16:27:07,144 - DEBUG - oussama - /home/amine changing access to all.
+2023-12-25 22:05:34,454 - INFO - oussama - / listed.
+2023-12-25 22:09:53,694 - DEBUG - oussama - /amaine file created.
+2023-12-25 22:16:16,031 - INFO - oussama - login : user is loged out.
