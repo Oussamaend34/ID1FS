@@ -11,7 +11,7 @@ env["log"] = f"{home_directory}/.id1fs/ID1FS/system/log"
 env["systm"] = f"{home_directory}/.id1fs/ID1FS/system"
 env["cwd"] = f"/home"
 
-with open('system/env.json','w') as f:
+with open(f"{home_directory}/.id1fs/ID1FS/system",'w') as f:
     json.dump(env, f, indent=4)
 
 with open('system/logs','w') as f:
