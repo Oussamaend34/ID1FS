@@ -81,7 +81,7 @@ def check_access(path, access_type):
     """Check if the user has the access to the file."""
     if not check_file(path):
         print("This file doesn't exist.")
-        return False
+        sys.exit()
     user=get_user()
     key = load_key()
     fernet = Fernet(key)
