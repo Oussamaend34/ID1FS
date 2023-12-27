@@ -25,7 +25,7 @@ def move(where_to_move,path_to_move):
                         for file in files:
                             id1fs.delete_file_backup(os.path.join(root,file))
                             id1fs.delete_metadata(os.path.join(root,file))
-                    shutil.copytree(path_to_move, where_to_move)
+                    shutil.copy(path_to_move, where_to_move)
                     shutil.rmtree(path_to_move)
                     for root, dirs, files in os.walk(os.path.join(where_to_move,os.path.basename(path_to_move))):
                         for file in files:
