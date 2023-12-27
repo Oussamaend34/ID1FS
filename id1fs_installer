@@ -8,7 +8,7 @@ sudo apt install python3-pip
 pip3 install click
 if [ $username = "root" ];
 then
-    ID1FS_dir="/root/.id1fs"
+    ID1FS_dir="/root/.id1fs/ID1FS"
     Home_dir="/root"
 else 
     ID1FS_dir="/home/$username/.id1fs/ID1FS"
