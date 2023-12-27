@@ -21,6 +21,7 @@ mkdir -p $ID1FS_dir
 mkdir $ID1FS_dir/backup
 mkdir $ID1FS_dir/metadata
 mkdir $ID1FS_dir/home
+mkdir $ID1FS_dir/downloads
 cp -r src $ID1FS_dir
 cp -r system $ID1FS_dir
 chmod a+x $ID1FS_dir/src/*
