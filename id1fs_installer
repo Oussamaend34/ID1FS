@@ -5,10 +5,10 @@ echo "Installing dependencies..."
 sudo apt-get install git
 sudo apt install python3
 sudo apt install python3-pip
-pip3 install click
+sudo apt install python3-click
 if [ $username = "root" ];
 then
-    ID1FS_dir="/root/.id1fs"
+    ID1FS_dir="/root/.id1fs/ID1FS"
     Home_dir="/root"
 else 
     ID1FS_dir="/home/$username/.id1fs/ID1FS"
